@@ -1,26 +1,27 @@
 @extends('layout')
 
 @section('content')
-    <h1>Modifier le Produit</h1>
+    <div class="container">
+        <h2>Edit Product</h2>
 
-    <form action="{{ route('products.update', $id) }}" method="post" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <label for="libelle">Libellé:</label>
-        <input type="text" name="libelle" value="{{ $product['libelle'] }}" required><br>
-
-        <label for="marque">Marque:</label>
-        <input type="text" name="marque" value="{{ $product['marque'] }}" required><br>
-
-        <label for="prix">Prix:</label>
-        <input type="number" name="prix" step="0.01" value="{{ $product['prix'] }}" required><br>
-
-        <label for="stock">Stock:</label>
-        <input type="number" name="stock" value="{{ $product['stock'] }}" required><br>
-
-        <button type="submit">Mettre à jour le produit</button>
-    </form>
-    
-    <a href="{{ route('products.index') }}">Retour à la liste des produits</a>
+        <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="form-group">
+                <label for="Libelle">Libelle:</label>
+                <input type="text" name="Libelle" class="form-control" value="{{ $product->Libelle }}" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Product</button>
+        </form>
+    </div>
 @endsection
