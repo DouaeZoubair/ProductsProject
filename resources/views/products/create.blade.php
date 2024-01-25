@@ -1,25 +1,32 @@
 @extends('layout')
 
 @section('content')
-    <h1>Créer un Nouveau Produit</h1>
+    <div class="container">
+        <h2>Create Product</h2>
 
-    <form action="{{ route('products.store') }}" method="post" enctype="multipart/form-data">
-        @csrf
-        <label for="libelle">Libellé:</label>
-        <input type="text" name="libelle" required><br>
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <label for="marque">Marque:</label>
-        <input type="text" name="marque" required><br>
-
-        <label for="prix">Prix:</label>
-        <input type="number" name="prix" step="0.01" required><br>
-
-        <label for="stock">Stock:</label>
-        <input type="number" name="stock" required><br>
-
-
-        <button type="submit">Créer le produit</button>
-    </form>
-    
-    <a href="{{ route('products.index') }}">Retour à la liste des produits</a>
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="Libelle">Libelle:</label>
+                <input type="text" name="Libelle" class="form-control" required>
+                <label for="marque">Marque:</label>
+                <input type="text" name="marq" class="form-control" required>
+                <label for="prix">Prix:</label>
+                <input type="number" name="prx" class="form-control" required>
+                <label for="Stock">Stock:</label>
+                <input type="number" name="stck" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Product</button>
+        </form>
+    </div>
 @endsection

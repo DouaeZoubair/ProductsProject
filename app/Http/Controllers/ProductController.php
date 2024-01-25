@@ -1,76 +1,68 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
-    private $products = [];
-
     public function index()
     {
-        return view('products.index' , ['products' => $this->products]);
+        $products = Product::all();
+        return view('products.index', compact('products'));
     }
+
     public function create()
     {
         return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $products = [
-            'libelle' => $request->input('libelle'),
-            'marque' => $request->input('marque'),
-            'prix' => $request->input('prix'),
-            'stock' => $request->input('stock'),
-        ];
-        $this->products[] = $products;
-        return redirect()->route('products.index');
+        $request->validate([
+            'Libelle' => 'required|string',
+            'Marque' => 'required|string',
+            'Prix' => 'required|numeric',
+            'Stock' => 'required|integer|min:1|max:9999'
+        ]);
+
+        $product = Product::create($request->all());
+
+        return redirect()->route('products.show', $product->id)->with('success', 'Product created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-       $products = $this->products[$id];
-       return view('products.show' , ['product' =>$products]);
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $products = $this->products[$id];
-        return view('products.edit' , ['product' =>$products , 'id' => $id]);
-
+        $product = Product::findOrFail($id);
+        return view('products.edit', compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $this->products=[$id] = [
-            'libelle' => $request->input('libelle'),
-            'marque' => $request->input('marque'),
-            'prix' => $request->input('prix'),
-            'stock' => $request->input('stock'),
-        ];
-        return redirect()->route('products.index');
+        $request->validate([
+            'Libelle' => 'required|string',
+            'Marque' => 'required|string',
+            'Prix' => 'required|numeric',
+            'Stock' => 'required|integer|min:1|max:9999'
+        ]);
+
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        return redirect()->route('products.show', $id)->with('success', 'Product updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        unset($this->products[$id]);
-        return redirect()->route('products.index');
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully!');
     }
 }

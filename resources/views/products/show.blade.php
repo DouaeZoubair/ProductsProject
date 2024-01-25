@@ -1,14 +1,24 @@
 @extends('layout')
 
 @section('content')
-    <h1>Détails du Produit</h1>
+    <div class="container">
+        <h2>Product Details</h2>
 
-    <ul>
-        <li><strong>Libellé:</strong> {{ $product['libelle'] }}</li>
-        <li><strong>Marque:</strong> {{ $product['marque'] }}</li>
-        <li><strong>Prix:</strong> {{ $product['prix'] }}</li>
-        <li><strong>Stock:</strong> {{ $product['stock'] }}</li>
-    </ul>
+        <div>
+            <strong>ID:</strong> {{ $product->id }}<br>
+            <strong>Libelle:</strong> {{ $product->Libelle }}<br>
+            <strong>Marque:</strong> {{ $product->Marque }}<br>
+            <strong>Prix:</strong> {{ $product->Prix }}<br>
+            <strong>Stock:</strong> {{ $product->Stock }}<br>
+        </div>
 
-    <a href="{{ route('products.index') }}">Retour à la liste des produits</a>
+        <div class="mt-3">
+            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+            </form>
+        </div>
+    </div>
 @endsection

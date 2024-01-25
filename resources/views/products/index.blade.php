@@ -1,44 +1,41 @@
 @extends('layout')
 
 @section('content')
-    <h1 >Liste des Produits</h1>
+    <div class="container">
+        <h2>Product List</h2>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Libellé</th>
-                <th>Marque</th>
-                <th>Prix</th>
-                <th>Stock</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($products as $key => $product)
-                <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ $product['libelle'] }}</td>
-                    <td>{{ $product['marque'] }}</td>
-                    <td>{{ $product['prix'] }}</td>
-                    <td>{{ $product['stock'] }}</td>
-                    <td>
-                        <a href="{{ route('products.show', $key) }}">Voir</a>
-                        <a href="{{ route('products.edit', $key) }}">Modifier</a>
-                        <form action="{{ route('products.destroy', $key) }}" method="post" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Supprimer</button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6">Aucun produit trouvé.</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <a href="{{ route('products.create') }}">Créer un nouveau produit</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Libelle</th>
+                    <th>Marque</th>
+                    <th>Prix</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($products as $product)
+                    <tr>
+                        <td>{{ $product->id }}</td>
+                        <td>{{ $product->Libelle }}</td>
+                        <td>{{ $product->Marque }}</td>
+                        <td>{{ $product->Prix }}</td>
+                        <td>{{ $product->Stock }}</td>
+                        <td>
+                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-info">Show</a>
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @endsection
